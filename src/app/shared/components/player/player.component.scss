@@ -1,0 +1,152 @@
+.player {
+    will-change: transform;
+    transition: transform 0.3s ease-in-out;
+    
+    &--hidden {
+      transform: translateY(100%);
+    }
+  
+    // Add a subtle animation for active state
+    &--playing {
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, theme('colors.indigo.500'), theme('colors.purple.500'));
+        animation: progress 60s linear infinite;
+      }
+    }
+  }
+  
+  // Custom volume slider styling
+  .volume-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 4px;
+    border-radius: 2px;
+    background: linear-gradient(to right, theme('colors.indigo.500'), theme('colors.indigo.400'));
+    outline: none;
+    
+    &--muted {
+      opacity: 0.5;
+    }
+    
+    &::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: theme('colors.indigo.600');
+      cursor: pointer;
+      border: 2px solid white;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      transition: all 0.2s ease;
+      
+      &:hover {
+        transform: scale(1.1);
+        background: theme('colors.indigo.700');
+      }
+    }
+    
+    &::-moz-range-thumb {
+      width: 14px;
+      height: 14px;
+      border: none;
+      border-radius: 50%;
+      background: theme('colors.indigo.600');
+      cursor: pointer;
+      border: 2px solid white;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      transition: all 0.2s ease;
+      
+      &:hover {
+        transform: scale(1.1);
+        background: theme('colors.indigo.700');
+      }
+    }
+    
+    &:focus {
+      &::-webkit-slider-thumb {
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+      }
+      
+      &::-moz-range-thumb {
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+      }
+    }
+  }
+  
+  // Buffering spinner animation
+  .loading-spinner {
+    width: 24px;
+    height: 24px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s ease-in-out infinite;
+  }
+  
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  
+  @keyframes progress {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+  
+  // Enhanced accessibility focus styles
+  button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+  }
+  
+  // Animations for player controls
+  button {
+    transition: all 0.15s ease;
+    
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+  
+  // Responsive adjustments
+  @media (max-width: 640px) {
+    .player {
+      padding-bottom: env(safe-area-inset-bottom, 0);
+    }
+  }
+  
+  // Optimize animations for users who prefer reduced motion
+  @media (prefers-reduced-motion: reduce) {
+    .player,
+    button,
+    .volume-slider::-webkit-slider-thumb,
+    .volume-slider::-moz-range-thumb {
+      transition: none;
+    }
+    
+    .loading-spinner {
+      animation-duration: 1.5s;
+    }
+    
+    button:active {
+      transform: none;
+    }
+    
+    .player--playing::before {
+      animation: none;
+      opacity: 0.8;
+    }
+  }

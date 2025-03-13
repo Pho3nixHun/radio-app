@@ -1,0 +1,59 @@
+.pagination-container {
+    margin: 1.5rem 0;
+    
+    // Improve focus visibility for accessibility
+    button:focus {
+      outline: 2px solid rgba(99, 102, 241, 0.4);
+      outline-offset: 2px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    // Enhanced hover states
+    button:not([disabled]):hover {
+      transform: translateY(-1px);
+      transition: transform 0.1s ease-in-out;
+    }
+    
+    // Handle reduced motion preference
+    @media (prefers-reduced-motion: reduce) {
+      button:hover {
+        transform: none;
+      }
+    }
+    
+    // Adjust for mobile screens
+    @media (max-width: 640px) {
+      ul {
+        justify-content: center;
+      }
+      
+      // Hide page numbers on very small screens, keep only first/prev/next/last
+      @media (max-width: 480px) {
+        li:not(:first-child):not(:last-child):not(:nth-child(2)):not(:nth-last-child(2)) {
+          display: none;
+        }
+      }
+    }
+  }
+  
+  // Add subtle animation to the active page indicator
+  button[aria-current="page"] {
+    position: relative;
+    
+    &:after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background-color: currentColor;
+      transform: scaleX(0.8);
+      transition: transform 0.2s ease;
+    }
+    
+    &:hover:after {
+      transform: scaleX(1);
+    }
+  }

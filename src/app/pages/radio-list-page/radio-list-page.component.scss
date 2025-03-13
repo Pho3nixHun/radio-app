@@ -1,0 +1,59 @@
+// Additional styles for radio list page
+
+// Animation for loading spinner
+@keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  // Enhance scrolling behavior
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  // Ensure consistent card heights in the grid
+  :host {
+    display: block;
+    
+    // Make card containers equal height
+    ::ng-deep app-radio-card {
+      height: 100%;
+      display: block;
+      
+      // Make the inner card take full height
+      > div {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+    }
+  }
+  
+  // Style focus indicators for better accessibility
+  button:focus, 
+  select:focus {
+    outline: 2px solid rgba(99, 102, 241, 0.4);
+    outline-offset: 2px;
+  }
+  
+  // Improve mobile experience
+  @media (max-width: 640px) {
+    .container {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+    
+    // Stack filter controls on mobile
+    .filter-controls {
+      flex-direction: column;
+      align-items: stretch;
+      
+      > div {
+        margin-bottom: 0.75rem;
+      }
+    }
+  }

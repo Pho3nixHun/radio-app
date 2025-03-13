@@ -1,0 +1,95 @@
+@let state = state$ | async;
+
+<!-- Radio List Page -->
+<div class="container mx-auto px-4 py-8">
+    <!-- Header Section -->
+    <header class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Radio Stations</h1>
+      <p class="text-gray-600 dark:text-gray-300">
+        Radio stations from around the world
+      </p>
+    </header>
+  
+    <!-- Loading State -->
+     @if (state?.loading === null) {
+         <div class="flex justify-center items-center h-64">
+           <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
+         </div>
+     }
+
+     <!-- Error State -->
+     @if (state?.error; as error) {
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+           <p>{{ error }}</p>
+           <button (click)="onPageChange('1')" class="mt-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
+                Retry
+           </button>
+        </div>
+     }
+
+     @if (state?.vm; as vm) {
+        <!-- Filter and Sort Controls -->
+        <div class="mb-6 flex flex-wrap items-center gap-4">
+            <div class="flex items-center">
+            <label for="sortBy" class="mr-2 text-gray-700 dark:text-gray-300">Sort by:</label>
+            <select
+                #sortBy
+                id="sortBy" 
+                (change)="onSortOrderChange(sortBy.value)"
+                class="bg-white text-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded px-3 py-2 text-sm"
+            >
+                @for(optionVM of vm.sortByOptionVMs; track optionVM.value) {
+                    <option [value]="optionVM.value" [selected]="optionVM.selected">{{ optionVM.label }}</option>
+                }
+            </select>
+            </div>
+            
+            <div class="flex items-center">
+            <label for="limit" class="mr-2 text-gray-700 dark:text-gray-300">Show:</label>
+            <select 
+                #pageSize
+                (change)="onPageSizeChange(pageSize.value)"
+                class="bg-white text-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded px-3 py-2 text-sm"
+            >
+                @for(optionVM of vm.pageSizeOptionVMs; track optionVM.value) {
+                    <option [value]="optionVM.value" [selected]="optionVM.selected">{{ optionVM.label }}</option>
+                }
+            </select>
+            </div>
+            
+            <div class="flex items-center ml-auto">
+            <label class="inline-flex items-center cursor-pointer">
+                <input 
+                #hideOffline
+                type="checkbox"
+                [checked]="vm.hideOffline"
+                (change)="onHideOfflineChange(hideOffline.checked)"
+                class="sr-only peer"
+                >
+                <div class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-indigo-600"></div>
+                <span class="ml-3 text-sm font-medium text-gray-700 dark:text-gray-300">Hide offline stations</span>
+            </label>
+            </div>
+        </div>
+
+        <!-- Radio Cards Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            @for(radio of vm.radioEntries; track radio.name) {
+                <app-radio-card [vm]="radio" (play)="onTune(radio)" class="h-full"></app-radio-card>
+            }
+        </div>
+        <app-pagination [vm]="vm.paginationVM" (pageChange)="onPageChange($event)"></app-pagination>
+        <!-- Empty State -->
+        @if (vm.empty) {
+            <div class="flex flex-col items-center justify-center h-64">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 19v-8.93a2 2 0 01.89-1.664l7-4.666a2 2 0 012.22 0l7 4.666A2 2 0 0121 10.07V19M3 19a2 2 0 002 2h14a2 2 0 002-2M3 19l6.75-4.5M21 19l-6.75-4.5M3 10l6.75 4.5M21 10l-6.75 4.5m0 0l-1.14.76a2 2 0 01-2.22 0l-1.14-.76" />
+                </svg>
+                <p class="mt-2 text-lg text-gray-500">No radio stations found</p>
+                <button (click)="onPageChange('1')" class="mt-4 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">
+                Try Again
+                </button>
+            </div>
+        }
+     }
+</div>
