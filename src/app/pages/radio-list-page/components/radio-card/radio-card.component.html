@@ -5,9 +5,20 @@
         @if (vm().faviconUrl) {
             <img src="{{ vm().faviconUrl }}" alt="Radio favicon" class="w-6 h-6 mr-3">
         }
-      <h3 class="text-lg font-semibold text-gray-800 dark:text-white truncate">
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-white truncate flex-grow">
         {{ vm().name }}
       </h3>
+      <!-- Favorite button -->
+      <button 
+        (click)="favorite.emit(!vm().favorite)"
+        [disabled]="!vm().url"
+        class="px-2 py-2 hover:bg-indigo-700 text-white rounded-md transition-colors duration-200 justify-center items-center"
+        [class.text-yellow-400]="vm().favorite">
+          <!-- Remove from Favorites (Filled Heart) -->
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+      </button>
     </div>
     
     <!-- Location information with flag -->
@@ -43,13 +54,15 @@
     </div>
     
     <!-- Tags -->
-    <div class="px-3 py-2 flex flex-wrap gap-1">
-      @for (tag of vm().tags; track tag) {
-        <app-tag>
-          {{ tag }}
-        </app-tag>
-      }
-    </div>
+    @if(vm().tags.length > 0) {
+      <div class="px-3 py-2 flex flex-wrap gap-1">
+        @for (tag of vm().tags; track tag) {
+          <app-tag>
+            {{ tag }}
+          </app-tag>
+        }
+      </div>
+    }
     
     <div class="mt-auto flex flex-col p-3 space-y-2">
       <!-- Homepage link -->

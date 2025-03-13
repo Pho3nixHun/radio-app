@@ -7,6 +7,7 @@ import { RadioListPageService } from './radio-list-page.service';
 import { PaginationComponent } from '@app/shared/components/pagination/pagination.component';
 import { toEnum, toNumber } from '@utils';
 import { PlayerService } from '@app/shared/services/player/player.service';
+import { XRadioEntry } from './radio-list-page.model';
 
 /**
  * Component responsible for rendering the radio list page
@@ -33,6 +34,7 @@ export class RadioListPageComponent {
   protected onHideOfflineChange = (hideOffline: boolean): void => this.radioListPageService.setHideOffline(hideOffline);
 
   protected onTune = (radioEntry: RadioEntry): Promise<void> => this.player.tune(radioEntry);
+  protected onFavorite = (radioEntry: XRadioEntry): void => this.radioListPageService.setFavorite(radioEntry, !radioEntry.favorite);
   
   // Expose enum to template
   protected readonly RadioSearchOrder = RadioSearchOrder;

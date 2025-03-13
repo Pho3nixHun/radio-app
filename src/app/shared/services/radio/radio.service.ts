@@ -22,7 +22,7 @@ const mapRadioEntryResponse = (entry: RadioEntryResponse): RadioEntry => ({
   urlResolved: toUrl(entry.url_resolved, null),
   homepageUrl: toUrl(entry.homepage, null),
   faviconUrl: toUrl(entry.favicon, null),
-  tags: entry.tags.split(','),
+  tags: entry.tags.split(',').filter(Boolean),
   language: entry.language,
   codec: entry.codec,
   bitrate: entry.bitrate,

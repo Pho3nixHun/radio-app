@@ -1,4 +1,4 @@
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { PlayerService } from '@services/player/player.service';
 import { toNumber } from '@utils';
@@ -8,7 +8,7 @@ import { toNumber } from '@utils';
  */
 @Component({
   selector: 'app-player',
-  imports: [AsyncPipe],
+  imports: [AsyncPipe, NgClass],
   templateUrl: './player.component.html',
   styleUrl: './player.component.scss'
 })

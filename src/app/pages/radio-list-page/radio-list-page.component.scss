@@ -15,24 +15,6 @@
     scroll-behavior: smooth;
   }
   
-  // Ensure consistent card heights in the grid
-  :host {
-    display: block;
-    
-    // Make card containers equal height
-    ::ng-deep app-radio-card {
-      height: 100%;
-      display: block;
-      
-      // Make the inner card take full height
-      > div {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-      }
-    }
-  }
-  
   // Style focus indicators for better accessibility
   button:focus, 
   select:focus {

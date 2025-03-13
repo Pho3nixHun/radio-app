@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { RadioSearchOrder } from '@app/shared/models/radio.model';
+import { RadioEntry, RadioSearchOrder } from '@app/shared/models/radio.model';
 import { RadioService } from '@app/shared/services/radio/radio.service';
 import { BehaviorSubject,
   catchError,
@@ -10,8 +10,18 @@ import { BehaviorSubject,
   startWith,
   switchMap
 } from 'rxjs';
-import { RadioListPageState } from './radio-list-page.model';
+import { RadioListPageState, XRadioEntry } from './radio-list-page.model';
+import { FavoriteService } from '@app/shared/services/favorite/favorite.service';
 
+const isRadioFavorite = (
+  radio: RadioEntry,
+  favorites: RadioEntry[] | null
+): boolean => favorites?.some(favorite => favorite.id === radio.id) ?? false;
+
+const toXRadioEntry = (radio: RadioEntry, favorites: RadioEntry[] | null): XRadioEntry => ({
+  ...radio,
+  favorite: isRadioFavorite(radio, favorites)
+});
 /**
  * Service responsible for generating the state of the radio list page
  */
@@ -21,6 +31,7 @@ import { RadioListPageState } from './radio-list-page.model';
 })
 export class RadioListPageService {
   private readonly radioService = inject(RadioService);
+  private readonly favoriteService = inject(FavoriteService);
 
   private readonly currentPage$ = new BehaviorSubject<number>(1);
   private readonly pageSize$ = new BehaviorSubject<number>(10);
@@ -41,7 +52,8 @@ export class RadioListPageService {
       hideOffline: this.hideOffline$,
       reverse: this.reverse$,
       radioCount: this.radioCount$,
-      brokenRadioCount: this.brokenRadioCount$
+      brokenRadioCount: this.brokenRadioCount$,
+      favorites: this.favoriteService.getFavorites$()
     }).pipe(
       switchMap(({
         currentPage,
@@ -50,7 +62,8 @@ export class RadioListPageService {
         hideOffline,
         reverse,
         radioCount,
-        brokenRadioCount
+        brokenRadioCount,
+        favorites
       }) => 
         this.radioService.getRadioList$({
           order: sortOrder,
@@ -61,13 +74,14 @@ export class RadioListPageService {
         }).pipe(
           map((radioEntries) => ({
             vm: {
-              radioEntries,
+              radioEntries: radioEntries.map(radio => toXRadioEntry(radio, favorites)),
               paginationVM: {
                 currentPage,
                 totalItems: hideOffline ? radioCount - brokenRadioCount : radioCount,
                 pageSize,
                 maxPageButtons: 25
               },
+              favorites: favorites.map(favorite => toXRadioEntry(favorite, favorites)),
               sortByOptionVMs: [
                 {
                   value: RadioSearchOrder.Name,
@@ -88,6 +102,16 @@ export class RadioListPageService {
                   value: RadioSearchOrder.Random,
                   label: 'Random',
                   selected: sortOrder === RadioSearchOrder.Random
+                },
+                {
+                  value: RadioSearchOrder.Votes,
+                  label: 'Votes',
+                  selected: sortOrder === RadioSearchOrder.Votes
+                },
+                {
+                  value: RadioSearchOrder.Country,
+                  label: 'Country',
+                  selected: sortOrder === RadioSearchOrder.Country
                 }
               ],
               pageSizeOptionVMs: [
@@ -113,4 +137,12 @@ export class RadioListPageService {
   public setSortOrder = (sortOrder: RadioSearchOrder): void => this.sortOrder$.next(sortOrder);
   public setHideOffline = (hideOffline: boolean): void => this.hideOffline$.next(hideOffline);
   public setReverse = (reverse: boolean): void => this.reverse$.next(reverse);
+
+  public setFavorite = (radio: XRadioEntry, favorite: boolean): void => {
+    if (favorite) {
+      this.favoriteService.setFavorite(radio);
+      return;
+    }
+    this.favoriteService.removeFavorite(radio);
+  }
 }

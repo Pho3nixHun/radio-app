@@ -1,23 +1,25 @@
+@keyframes shine {
+  0% {
+    background-position: 0% 50%;
+    background-size: 400% 400%;
+  }
+  100% {
+    background-position: 100% 50%;
+    background-size: 200% 100%;
+  }
+}
 .player {
     will-change: transform;
     transition: transform 0.3s ease-in-out;
     
-    &--hidden {
+    &.hidden {
       transform: translateY(100%);
     }
   
     // Add a subtle animation for active state
-    &--playing {
-      &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 2px;
-        background: linear-gradient(90deg, theme('colors.indigo.500'), theme('colors.purple.500'));
-        animation: progress 60s linear infinite;
-      }
+    &.playing {
+      background: linear-gradient(55deg, var(--color-indigo-900) 36%, var(--color-indigo-500) 37%, var(--color-indigo-900) 40%);
+      animation: shine 20s ease-out infinite;
     }
   }
   
@@ -27,7 +29,7 @@
     appearance: none;
     height: 4px;
     border-radius: 2px;
-    background: linear-gradient(to right, theme('colors.indigo.500'), theme('colors.indigo.400'));
+    background: linear-gradient(to right, var(--color-indigo-900), var(--color-indigo-500));
     outline: none;
     
     &--muted {
@@ -40,7 +42,7 @@
       width: 14px;
       height: 14px;
       border-radius: 50%;
-      background: theme('colors.indigo.600');
+      background: var(--color-indigo-600);
       cursor: pointer;
       border: 2px solid white;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -48,7 +50,7 @@
       
       &:hover {
         transform: scale(1.1);
-        background: theme('colors.indigo.700');
+        background: var(--color-indigo-700);
       }
     }
     
@@ -57,7 +59,7 @@
       height: 14px;
       border: none;
       border-radius: 50%;
-      background: theme('colors.indigo.600');
+      background: var(--color-indigo-600);
       cursor: pointer;
       border: 2px solid white;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -65,7 +67,7 @@
       
       &:hover {
         transform: scale(1.1);
-        background: theme('colors.indigo.700');
+        background: var(--color-indigo-700);
       }
     }
     

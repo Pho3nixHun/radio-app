@@ -14,13 +14,18 @@ export interface PageSizeOptionVM {
     selected: boolean;
 }
 
+export interface XRadioEntry extends RadioEntry {
+  favorite: boolean;
+}
+
 export interface RadioListPageVM {
-  radioEntries: RadioEntry[];
+  radioEntries: XRadioEntry[];
   paginationVM: PaginationVM;
   sortByOptionVMs: SortByOptionVM[];
   pageSizeOptionVMs: PageSizeOptionVM[];
   hideOffline: boolean;
   empty: boolean;
+  favorites: XRadioEntry[];
 }
 
 export type RadioListPageState = PageState<RadioListPageVM>;

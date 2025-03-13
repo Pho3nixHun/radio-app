@@ -1,7 +1,7 @@
 @let state = state$ | async;
 <div 
   class="player fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 shadow-lg transition-transform duration-300"
-  [class.player--hidden]="!(state$ | async)?.currentRadio"
+  [ngClass]="{ hidden: !state?.currentRadio, playing: state?.isPlaying }"
 >
   <!-- Error notification -->
    @if (state?.error; as error) {

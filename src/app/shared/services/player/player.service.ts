@@ -8,7 +8,8 @@ import { BehaviorSubject,
   of,
   shareReplay,
   startWith,
-  switchScan
+  switchScan,
+  tap
 } from 'rxjs';
 import { RadioEntry } from '@models/radio.model';
 
@@ -84,7 +85,7 @@ export class PlayerService {
     return combineLatest([this.playerState$, this.audioElement$]).pipe(
         map(([state, audio]) => ({
             ...state,
-            isPlaying: audio?.paused ?? false,
+            isPlaying: audio ? !audio.paused : false,
             isBuffering: audio?.readyState === HTMLMediaElement.HAVE_NOTHING,
             volume: audio?.volume ?? state.volume,
             isMuted: audio?.muted ?? state.isMuted,

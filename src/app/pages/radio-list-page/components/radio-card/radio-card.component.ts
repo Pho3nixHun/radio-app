@@ -8,6 +8,7 @@ export interface RadioLocation {
 }
 
 export interface RadioCardVM {
+  favorite: boolean;
   name: string;
   url: URL | null;
   homepageUrl: URL | null;
@@ -30,4 +31,5 @@ export interface RadioCardVM {
 export class RadioCardComponent {
   public vm = input.required<RadioCardVM>();
   public play = output<void>();
+  public favorite = output<boolean>();
 }

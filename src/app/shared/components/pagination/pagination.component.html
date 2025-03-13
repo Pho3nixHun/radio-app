@@ -1,5 +1,12 @@
 <nav aria-label="Pagination navigation" class="pagination-container">
-    <ul class="flex items-center -space-x-px">
+    <!-- Page summary -->
+    @if (vm().totalItems > 0) {
+      <div class="mt-3 text-sm text-gray-500 dark:text-gray-400 flex justify-end">
+          Showing page {{ vm().currentPage }} of {{ totalPages() }}
+          <span class="ml-1">({{ vm().totalItems }} items)</span>
+      </div>
+    }
+    <ul class="flex items-center justify-end -space-x-px">
       <!-- First Page Button -->
       <li>
         <button
@@ -105,12 +112,4 @@
         </button>
       </li>
     </ul>
-    
-    <!-- Page summary -->
-     @if (vm().totalItems > 0) {
-        <div class="mt-3 text-sm text-gray-500 dark:text-gray-400">
-            Showing page {{ vm().currentPage }} of {{ totalPages() }}
-            <span class="ml-1">({{ vm().totalItems }} items)</span>
-        </div>
-     }
-  </nav>
+</nav>
